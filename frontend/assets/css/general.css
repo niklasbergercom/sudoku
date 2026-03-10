@@ -1,0 +1,110 @@
+:root {
+    --color-background-primary: #1a1a1c;
+    --color-background-secondary: #27272b;
+    --color-background-selected: #bcbcbc;
+    --color-text: #FFFFFF;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-background-primary);
+    color: var(--color-text);
+    font-family: sans-serif;
+}
+
+header {
+    font-size: larger;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    background-color: var(--color-background-secondary);
+}
+
+#difficulty-selector {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    align-items: center;
+}
+
+#difficulty-selector ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+    overflow-x: visible;
+}
+
+#difficulty-selector ul li {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--color-background-selected);
+    transition: background-color 500ms ease, color 500ms ease;
+    cursor: pointer;
+}
+
+#difficulty-selector .difficulty-selected, #difficulty-selector ul li:hover {
+    background-color: var(--color-background-selected);
+    color: var(--color-background-primary);
+}
+
+/* SUDOKU BOARD */
+
+#sudoku-board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 calc(50% - 250px);
+}
+
+#sudoku-board > div {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+}
+
+#sudoku-board > div > div {
+    border: 1px solid gray;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: xx-large;
+}
+
+#sudoku-board > div > div:nth-of-type(3), #sudoku-board > div > div:nth-of-type(6) {
+    border-right-color: white;
+}
+
+#sudoku-board > div:nth-of-type(3) > div, #sudoku-board > div:nth-of-type(6) > div, #sudoku-board > div:nth-of-type(9) > div {
+    border-bottom-color: white;
+}
+
+#sudoku-board > div:nth-of-type(1) > div {
+    border-top-color: white;
+}
+
+#sudoku-board > div > div:nth-of-type(1) {
+    border-left-color: white;
+}
+
+#sudoku-board > div > div:nth-of-type(9) {
+    border-right-color: white;
+}
+
+.board-cell-empty {
+    cursor: pointer;
+    color: lightblue;
+}
+
+.board-cell-selected {
+    background-color: #56565c;
+}
+
+.board-cell-highlighted {
+    background-color: #2e2e32;
+}
