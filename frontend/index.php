@@ -23,15 +23,22 @@
         <div id="sudoku-board">
         </div>
         <div id="sudoku-keypad">
-            <div onclick="enterNumber(1)" id="keypad-1"></div>
-            <div onclick="enterNumber(2)" id="keypad-2"></div>
-            <div onclick="enterNumber(3)" id="keypad-3"></div>
-            <div onclick="enterNumber(4)" id="keypad-4"></div>
-            <div onclick="enterNumber(5)" id="keypad-5"></div>
-            <div onclick="enterNumber(6)" id="keypad-9"></div>
-            <div onclick="enterNumber(7)" id="keypad-6"></div>
-            <div onclick="enterNumber(8)" id="keypad-7"></div>
-            <div onclick="enterNumber(9)" id="keypad-8"></div>
+            <div id="sudoku-controls">
+                <div onclick="undoLast()"><img src="/assets/icon/rotate-left-solid-full-ffffff.svg" alt="Undo" title="Undo"></div>
+                <div onclick="togglePencil()"><img src="/assets/icon/pencil-solid-full-ffffff.svg" alt="Turn Notes on" title="Turn Notes on"></div>
+                <div onclick="enterNumber('0')"><img src="/assets/icon/eraser-solid-full-ffffff.svg" alt="Erase current cell" title="Erase current cell"></div>
+            </div>
+            <div id="sudoku-numbers">
+                <div onclick="enterNumber(1)" id="keypad-1" title="Enter '1'">1</div>
+                <div onclick="enterNumber(2)" id="keypad-2" title="Enter '2'">2</div>
+                <div onclick="enterNumber(3)" id="keypad-3" title="Enter '3'">3</div>
+                <div onclick="enterNumber(4)" id="keypad-4" title="Enter '4'">4</div>
+                <div onclick="enterNumber(5)" id="keypad-5" title="Enter '5'">5</div>
+                <div onclick="enterNumber(6)" id="keypad-6" title="Enter '6'">6</div>
+                <div onclick="enterNumber(7)" id="keypad-7" title="Enter '7'">7</div>
+                <div onclick="enterNumber(8)" id="keypad-8" title="Enter '8'">8</div>
+                <div onclick="enterNumber(9)" id="keypad-9" title="Enter '9'">9</div>
+            </div>
         </div>
     </div>
     <script src="./assets/js/game.js"></script>

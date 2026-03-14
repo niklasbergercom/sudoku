@@ -53,11 +53,17 @@ header {
 
 /* SUDOKU BOARD */
 
+#sudoku-main {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 calc(50% - 240px);
+    justify-content: center;
+}
+
 #sudoku-board {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 0 calc(50% - 250px);
 }
 
 #sudoku-board > div {
@@ -69,11 +75,13 @@ header {
 #sudoku-board > div > div {
     border: 1px solid gray;
     height: 50px;
+    max-height: calc(100vw / 9 - 5px);
     width: 50px;
+    max-width: calc(100vw / 9 - 5px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: xx-large;
+    font-size: clamp(1em, calc(100vw / 9 - 15px), 35px);
 }
 
 #sudoku-board > div > div:nth-of-type(3), #sudoku-board > div > div:nth-of-type(6) {
@@ -101,10 +109,53 @@ header {
     color: lightblue;
 }
 
-.board-cell-selected {
-    background-color: #56565c;
-}
-
 .board-cell-highlighted {
     background-color: #2e2e32;
+}
+
+.board-cell-highlighted-same-num {
+    background-color: #494950;
+}
+
+.board-cell-selected {
+    background-color: #67676e;
+}
+
+.board-cell-incorrect {
+    color: red;
+}
+
+/* SUDOKU KEYPAD */
+
+#sudoku-keypad {
+    margin-top: 50px;
+    width: 470px;
+    max-width: calc(100vw - 26px);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#sudoku-keypad > div {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    font-size: xx-large;
+}
+
+#sudoku-keypad > div > div {
+    cursor: pointer;
+    height: 50px;
+    max-height: calc(100vw / 9 - 5px);
+    width: 50px;
+    max-width: calc(100vw / 9 - 5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(1em, calc(100vw / 9 - 15px), 35px);
+}
+
+#sudoku-keypad > div > div > img {
+    height: clamp(1em, calc(100vw / 9 - 15px), 35px);
 }
