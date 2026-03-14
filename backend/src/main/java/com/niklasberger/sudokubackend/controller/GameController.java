@@ -24,34 +24,28 @@ public class GameController {
     private SudokuRepo sudokuRepo;
 
     // TODO: remove
-    @CrossOrigin(origins = "*")
-    @PostMapping("/game/create-new-sudoku")
-    private ResponseEntity<SudokuData> createNewSudoku(
-            @RequestBody Map<String, Object> requestBody
-    ) {
-        String puzzleString = requestBody.get("puzzle").toString();
-        String solutionString = requestBody.get("solution").toString();
-        int difficulty = Integer.parseInt(requestBody.get("difficulty").toString());
+//    @CrossOrigin(origins = "*")
+//    @PostMapping("/game/create-new-sudoku")
+//    private ResponseEntity<SudokuData> createNewSudoku(
+//            @RequestBody Map<String, Object> requestBody
+//    ) {
+//        String puzzleString = requestBody.get("puzzle").toString();
+//        String solutionString = requestBody.get("solution").toString();
+//        int difficulty = Integer.parseInt(requestBody.get("difficulty").toString());
+//
+//        SudokuData savedSudoku = sudokuRepo.save(new SudokuData(
+//                difficulty,
+//                puzzleString,
+//                solutionString
+//        ));
+//
+//        return new ResponseEntity<>(
+//                savedSudoku,
+//                HttpStatus.CREATED
+//        );
+//
+//    }
 
-//        Type listType = new TypeToken<ArrayList<ArrayList<Integer>>>() {}.getType();
-//        ArrayList<ArrayList<Integer>> puzzleArray = new Gson().fromJson(puzzleString, listType);
-//        ArrayList<ArrayList<Integer>> solutionArray = new Gson().fromJson(solutionString, listType);
-
-        SudokuData savedSudoku = sudokuRepo.save(new SudokuData(
-                difficulty,
-                puzzleString,
-                solutionString
-        ));
-
-        return new ResponseEntity<>(
-                savedSudoku,
-                HttpStatus.CREATED
-        );
-
-    }
-
-    // TODO: remove
-    @CrossOrigin(origins = "*")
     @PostMapping("/game/random-sudoku")
     private ResponseEntity<Object> random(
             @RequestBody Map<String, Object> requestBody
@@ -72,8 +66,6 @@ public class GameController {
 
     }
 
-    // TODO: remove
-    @CrossOrigin(origins = "*")
     @PostMapping("/game/check-cell")
     private ResponseEntity<Object> checkCell(
             @RequestBody Map<String, Object> requestBody
@@ -107,8 +99,6 @@ public class GameController {
         );
     }
 
-    // TODO: remove
-    @CrossOrigin(origins = "*")
     @PostMapping("/game/check-solution")
     private ResponseEntity<Object> checkSolution(
             @RequestBody Map<String, Object> requestBody

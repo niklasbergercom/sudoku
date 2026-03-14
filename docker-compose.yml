@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
     container_name: sudoku-frontend
     ports:
-      - "80:80"
+      - "8085:80"
     depends_on:
       - backend
     restart: unless-stopped
@@ -36,7 +36,7 @@ services:
       - MARIADB_DATABASE=mydatabase
     ports:
 #     TODO: Change to "3306" when ready for production
-      - "3306:3306"
+      - "3306"
     volumes:
       - db_data:/var/lib/mysql
     restart: unless-stopped
