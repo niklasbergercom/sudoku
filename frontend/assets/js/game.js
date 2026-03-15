@@ -7,7 +7,7 @@ let mistakes = 0;
 let history = [];
 let keydownDict = {}
 let notesOn = false;
-setGameMode("easy");
+setGameMode(0);
 
 document.addEventListener('keydown', function(event) {
     if (["control", "z"].includes(event.key.toLowerCase())) {
@@ -181,14 +181,13 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
 }
 
 function newGame() {
-    let difficultyInt = {"easy": 0, "medium": 1, "hard": 2, "very-hard": 3}[currentDifficulty]
     fetch("/api/game/random-sudoku", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            difficulty: difficultyInt
+            difficulty: currentDifficulty
         })
     }).then(response => {
         if (!response.ok) {
@@ -236,6 +235,10 @@ function newGame() {
 }
 
 function setGameMode(difficulty) {
+    for (let i = 0; i < document.getElementsByClassName("difficulty-selected").length; i++) {
+        document.getElementsByClassName("difficulty-selected")[i].classList.remove("difficulty-selected");
+    }
+    document.getElementById("difficulty-" + difficulty.toString()).classList.add("difficulty-selected");
     currentDifficulty = difficulty;
     newGame();
 }

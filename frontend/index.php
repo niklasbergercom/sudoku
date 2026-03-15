@@ -13,10 +13,10 @@
     <div id="difficulty-selector">
         Difficulty:
         <ul>
-            <li class="difficulty-selected">Easy</li>
-            <li>Medium</li>
-            <li>Hard</li>
-            <li>Very Hard</li>
+            <li onclick="setGameMode(0)" id="difficulty-0">Easy</li>
+            <li onclick="setGameMode(1)" id="difficulty-1">Medium</li>
+            <li onclick="setGameMode(2)" id="difficulty-2">Hard</li>
+            <li onclick="setGameMode(3)" id="difficulty-3">Very Hard</li>
         </ul>
     </div>
     <div id="sudoku-main">
