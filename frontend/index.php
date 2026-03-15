@@ -24,9 +24,9 @@
         </div>
         <div id="sudoku-keypad">
             <div id="sudoku-controls">
-                <div onclick="undoLast()"><img src="/assets/icon/rotate-left-solid-full-ffffff.svg" alt="Undo" title="Undo"></div>
-                <div onclick="togglePencil()"><img src="/assets/icon/pencil-solid-full-ffffff.svg" alt="Turn Notes on" title="Turn Notes on"></div>
-                <div onclick="enterNumber('0')"><img src="/assets/icon/eraser-solid-full-ffffff.svg" alt="Erase current cell" title="Erase current cell"></div>
+                <div onclick="undoLast()"><img src="/assets/icon/rotate-left-solid-full-ffffff.svg" alt="Undo [CTRL + Z]" title="Undo [CTRL + Z]"></div>
+                <div onclick="toggleNotes()" id="toggle-notes"><img src="/assets/icon/pencil-solid-full-ffffff.svg" alt="Turn Notes on [N]" title="Turn Notes on [N]"></div>
+                <div onclick="enterNumber('0')"><img src="/assets/icon/eraser-solid-full-ffffff.svg" alt="Erase current cell [DEL]" title="Erase current cell [DEL]"></div>
             </div>
             <div id="sudoku-numbers">
                 <div onclick="enterNumber(1)" id="keypad-1" title="Enter '1'">1</div>

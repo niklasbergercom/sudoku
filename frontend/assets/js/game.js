@@ -6,6 +6,7 @@ let currentId = ""
 let mistakes = 0;
 let history = [];
 let keydownDict = {}
+let notesOn = false;
 setGameMode("easy");
 
 document.addEventListener('keydown', function(event) {
@@ -18,6 +19,8 @@ document.addEventListener('keydown', function(event) {
         enterNumber("0")
     } else if (/^[0-9]$/.test(event.key)) {
         enterNumber(event.key);
+    } else if (event.key.toLowerCase() === "n") {
+        toggleNotes();
     }
 });
 
@@ -95,8 +98,39 @@ function cellClick(row, col) {
 
 function enterNumber(num, skipHistory = false, skipCellCheck = false) {
     if (cellIsWritable) {
-        getCurrentCell().classList.remove("board-cell-incorrect")
-        if (!skipHistory) {
+        
+        if (notesOn && !/^[1-9]$/.test(getCurrentCell().innerHTML)) {
+            if (!getCurrentCell().classList.contains("board-cell-notes")) {
+                getCurrentCell().classList.add("board-cell-notes");
+                getCurrentCell().innerHTML = `
+                <div></div>
+                <div></div>
+                <div></div>
+                
+                <div></div>
+                <div></div>
+                <div></div>
+                
+                <div></div>
+                <div></div>
+                <div></div>
+            `
+            }
+            getCurrentCell().children[parseInt(num) - 1].innerHTML = getCurrentCell().children[parseInt(num) - 1].innerHTML === num ? "" : num;
+            return;
+        } else if (notesOn && /^[1-9]$/.test(getCurrentCell().innerHTML)) {
+            return;
+        }
+        if (!skipHistory && getCurrentCell().classList.contains("board-cell-notes")) {
+            history.push({
+                cell: {
+                    row: currentCell.row,
+                    col: currentCell.row
+                },
+                oldNum: "0",
+                newNum: num
+            });
+        } else if (!skipHistory) {
             history.push({
                 cell: {
                     row: currentCell.row,
@@ -106,6 +140,10 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
                 newNum: num
             });
         }
+
+        getCurrentCell().classList.remove("board-cell-incorrect");
+        getCurrentCell().classList.remove("board-cell-notes");
+
         if (num === "0") {
             getCurrentCell().innerHTML = "";
             return;
@@ -250,4 +288,11 @@ function undoLast() {
     cellClick(history.at(-1).cell.row, history.at(-1).cell.col);
     enterNumber(history.at(-1).oldNum, true, true);
     history.pop();
+}
+
+function toggleNotes() {
+    notesOn = !notesOn;
+    document.getElementById("toggle-notes").children[0].alt = notesOn ? "Turn Notes off [N]" : "Turn Notes on [N]";
+    document.getElementById("toggle-notes").children[0].title = notesOn ? "Turn Notes off [N]" : "Turn Notes on [N]";
+    document.getElementById("toggle-notes").style.backgroundColor = notesOn ? "var(--color-background-selected)" : "unset";
 }
