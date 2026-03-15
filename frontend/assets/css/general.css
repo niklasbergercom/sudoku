@@ -51,6 +51,36 @@ header {
     color: var(--color-background-primary);
 }
 
+/* SUDOKU STATS */
+
+#sudoku-stats {
+    height: 50px;
+    max-height: calc(100vw / 9 - 5px);
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#sudoku-stats > div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    max-width: calc(100vw / 4.5 - 5px);
+}
+
+#sudoku-stats > div > img {
+    height: 40%;
+    margin-right: 10px;
+}
+
+#sudoku-timer-value-h, #sudoku-timer-value-h-label, #sudoku-timer-value-m, #sudoku-timer-value-m-label {
+    display: none;
+}
+
 /* SUDOKU BOARD */
 
 #sudoku-main {

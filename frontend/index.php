@@ -20,6 +20,16 @@
         </ul>
     </div>
     <div id="sudoku-main">
+        <div id="sudoku-stats">
+            <div id="sudoku-timer">
+                <img src="/assets/icon/stopwatch-solid-full-ffffff.svg" alt="Timer" title="Time spent on this Sudoku">
+                <span id="sudoku-timer-value"><span id="sudoku-timer-value-h">0</span><span id="sudoku-timer-value-h-label">h</span><span id="sudoku-timer-value-m">0</span><span id="sudoku-timer-value-m-label">m</span><span id="sudoku-timer-value-s">0</span>s</span>
+            </div>
+            <div id="sudoku-points">
+                <img src="/assets/icon/medal-solid-full-ffffff.svg" alt="Points" title="Points for this Sudoku">
+                <span>2 989</span>
+            </div>
+        </div>
         <div id="sudoku-board">
         </div>
         <div id="sudoku-keypad">

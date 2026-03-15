@@ -7,7 +7,10 @@ let mistakes = 0;
 let history = [];
 let keydownDict = {}
 let notesOn = false;
+let gameStart = new Date();
+gameStart.setFullYear(1990);
 setGameMode(0);
+setInterval(() => {updateTimer()}, 50);
 
 document.addEventListener('keydown', function(event) {
     if (["control", "z"].includes(event.key.toLowerCase())) {
@@ -230,6 +233,8 @@ function newGame() {
                     }
                 }
             }
+
+            gameStart = new Date();
         })
     })
 }
@@ -279,6 +284,7 @@ function checkForWin() {
             response.text().then(text => {
                 if (text === "Solution correct") {
                     // TODO: show a real message to user, not just alert
+                    gameStart.setFullYear(1990)
                     alert("Solved with " + mistakes + " mistakes");
                 }
             })
@@ -298,4 +304,42 @@ function toggleNotes() {
     document.getElementById("toggle-notes").children[0].alt = notesOn ? "Turn Notes off [N]" : "Turn Notes on [N]";
     document.getElementById("toggle-notes").children[0].title = notesOn ? "Turn Notes off [N]" : "Turn Notes on [N]";
     document.getElementById("toggle-notes").style.backgroundColor = notesOn ? "var(--color-background-selected)" : "unset";
+}
+
+function updateTimer() {
+
+    if (gameStart.getFullYear() < 2000) return;
+    
+    const hoursEl = document.getElementById("sudoku-timer-value-h");
+    const hoursLabelEl = document.getElementById("sudoku-timer-value-h-label");
+    const minutesEl = document.getElementById("sudoku-timer-value-m");
+    const minutesLabelEl = document.getElementById("sudoku-timer-value-m-label");
+    const secondsEl = document.getElementById("sudoku-timer-value-s");
+
+    let now = new Date();
+    let timeDifference = now - gameStart;
+    let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+    let minutes = Math.floor(timeDifference / (1000 * 60)) - hours * 60;
+    let seconds = Math.floor(timeDifference / 1000) - hours * 60 * 60 - minutes * 60;
+    
+    if (hours === 0) {
+        hoursEl.style.display = "none";
+        hoursLabelEl.style.display = "none";
+    } else {
+        hoursEl.style.display = "unset";
+        hoursLabelEl.style.display = "unset";
+        if (hoursEl.innerHTML !== hours.toString()) hoursEl.innerHTML = hours.toString();
+    }
+    
+    if (minutes === 0) {
+        minutesEl.style.display = "none";
+        minutesLabelEl.style.display = "none";
+    } else {
+        minutesEl.style.display = "unset";
+        minutesLabelEl.style.display = "unset";
+        if (minutesEl.innerHTML !== minutes.toString()) minutesEl.innerHTML = minutes.toString();
+    }
+    
+    if (secondsEl.innerHTML !== seconds.toString()) secondsEl.innerHTML = seconds.toString();
+
 }
