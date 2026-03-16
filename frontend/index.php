@@ -9,7 +9,20 @@
     <link rel="stylesheet" href="assets/css/general.css">
 </head>
 <body>
-    <header>Sudoku</header>
+    <div id="menu-wrapper">
+        <div id="menu">
+            <ul>
+                <li><a href="/">Standard Sudoku</a></li>
+                <li><a href="/challenge">Start Challenge</a></li>
+            </ul>
+        </div>
+    </div>
+    <header>
+        <div>Sudoku</div>
+        <div id="menu-button">
+            <img src="/assets/icon/bars-solid-full.svg" alt="Menu Icon" title="Open Menu" onclick="toggleMenu()">
+        </div>
+    </header>
     <div id="difficulty-selector">
         Difficulty:
         <ul>
@@ -27,7 +40,11 @@
             </div>
             <div id="sudoku-points">
                 <img src="/assets/icon/medal-solid-full-ffffff.svg" alt="Points" title="Points for this Sudoku">
-                <span>2 989</span>
+                <span id="sudoku-points-value">0</span>
+            </div>
+            <div id="sudoku-mistakes">
+                <img src="/assets/icon/circle-xmark-regular-full-ffffff.svg" alt="Mistakes" title="Mistakes">
+                <span id="sudoku-mistakes-value">0</span>
             </div>
         </div>
         <div id="sudoku-board">

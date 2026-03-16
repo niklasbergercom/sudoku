@@ -2,13 +2,21 @@ let sudokuBoard = document.getElementById("sudoku-board");
 let currentCell = {row: 0, col: 0}
 let cellIsWritable = false;
 let currentDifficulty = "";
-let currentId = ""
+let currentId = "";
+let currentPoints = 0;
 let mistakes = 0;
 let history = [];
 let keydownDict = {}
 let notesOn = false;
+let menuLock = false;
 let gameStart = new Date();
 gameStart.setFullYear(1990);
+
+let rowsSolved = {};
+let colsSolved = {};
+let numsSolved = {};
+let cellsSolved = {};
+
 setGameMode(0);
 setInterval(() => {updateTimer()}, 50);
 
@@ -174,8 +182,13 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
                     if (text === "Guess incorrect") {
                         getCurrentCell().classList.add("board-cell-incorrect")
                         mistakes++;
+                        document.getElementById("sudoku-mistakes-value").innerHTML = mistakes;
                     } else if (text === "Guess correct") {
-                        checkForWin()
+                        if (cellsSolved[currentCell.row.toString() + currentCell.col.toString()] !== true) {
+                            addPoints("cell");
+                            cellsSolved[currentCell.row.toString() + currentCell.col.toString()] = true;
+                        }
+                        checkForWin();
                     }
                 })
             }
@@ -184,6 +197,8 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
 }
 
 function newGame() {
+    mistakes = 0;
+    currentPoints = 0;
     fetch("/api/game/random-sudoku", {
         method: "POST",
         headers: {
@@ -254,21 +269,52 @@ function checkForWin() {
     let solution = []
     for (let i = 0; i < 9; i++) {
         let solutionRow = []
+        let rowFull = true;
         for (let j = 0; j < 9; j++) {
             let thisCell = getCell(i + 1, j + 1)
-            if (thisCell.innerHTML === "") allCellsFilled = false;
+            if (thisCell.innerHTML === "") {
+                allCellsFilled = false;
+                rowFull = false;
+            }
             if (thisCell.innerHTML !== "") numCounter[thisCell.innerHTML] += 1;
-            if (allCellsFilled) solutionRow.push(parseInt(thisCell.innerHTML));
+            solutionRow.push(parseInt(thisCell.innerHTML));
         }
-        if (allCellsFilled) solution.push(solutionRow);
+        if (rowFull && rowsSolved[i.toString()] !== true) {
+            addPoints("row");
+            rowsSolved[i.toString()] = true;
+        }
+        solution.push(solutionRow);
     }
+
+    // Check if num is solved for points and keypad
     for (let i = 1; i < 10; i++) {
-        if (numCounter[i] === 9 && document.getElementById("keypad-" + (i)).innerHTML === (i).toString()) {
-            document.getElementById("keypad-" + (i)).innerHTML = `
+        if (numCounter[i] === 9) {
+            if (numsSolved[i] !== true) {
+                addPoints("num");
+                numsSolved[i] = true;
+            }
+            if (document.getElementById("keypad-" + (i)).innerHTML === (i).toString()) {
+                document.getElementById("keypad-" + (i)).innerHTML = `
                     <img src="/assets/icon/check-solid-full-ffffff.svg" alt="All done!" title="All done!">
             `;
+            }
         }
     }
+
+    // Check if col is solved for points
+    for (let j = 0; j < 9; j++) {
+        let colFull = true
+        for (let i = 0; i < 9; i++) {
+            if (isNaN(solution[i][j])) {
+                colFull = false;
+            }
+        }
+        if (colFull && colsSolved[j] !== true) {
+            addPoints("col");
+            colsSolved[j] = true;
+        }
+    }
+
     if (!allCellsFilled) return;
     fetch("/api/game/check-solution", {
         method: "POST",
@@ -342,4 +388,51 @@ function updateTimer() {
     
     if (secondsEl.innerHTML !== seconds.toString()) secondsEl.innerHTML = seconds.toString();
 
+}
+
+function addPoints(category) {
+    const pointsEl = document.getElementById("sudoku-points-value");
+    if (!pointsEl) return;
+
+    const pointsToAdd = { col: 250, row: 250, num: 350, cell: 50, box: 300}[category];
+    if (pointsToAdd === undefined) return;
+
+    console.log("Adding " + pointsToAdd + " because of " + category);
+
+    const startPoints = currentPoints;
+    const targetPoints = currentPoints + pointsToAdd;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / 2000, 1);
+        const value = Math.floor(startPoints + (targetPoints - startPoints) * progress);
+        pointsEl.innerHTML = value.toString();
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            currentPoints = targetPoints;
+            pointsEl.innerHTML = currentPoints.toString();
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
+function toggleMenu(desiredState = "") {
+    let currentState = !["none", ""].includes(document.getElementById("menu-wrapper").style.display);
+    if ((desiredState === "open" || desiredState === "") && !currentState) {
+        document.getElementById("menu-wrapper").style.display = "flex";
+        setTimeout(() => {
+            document.getElementById("menu-wrapper").style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+            document.getElementById("menu").style.transform = "unset";  
+        }, 1);
+    } else if ((desiredState === "closed" || desiredState === "") && currentState) {
+        document.getElementById("menu").style.transform = "translateX(350px)";
+        document.getElementById("menu-wrapper").style.backgroundColor = "rgba(0, 0, 0, 0)";
+        setTimeout(() => {
+            document.getElementById("menu-wrapper").style.display = "none";
+        }, 1000);
+    }
 }
