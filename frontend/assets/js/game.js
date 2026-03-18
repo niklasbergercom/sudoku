@@ -16,6 +16,7 @@ let rowsSolved = {};
 let colsSolved = {};
 let numsSolved = {};
 let cellsSolved = {};
+let boxesSolved = {};
 
 setGameMode(0);
 setInterval(() => {updateTimer()}, 50);
@@ -199,6 +200,17 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
 function newGame() {
     mistakes = 0;
     currentPoints = 0;
+    history = [];
+    rowsSolved = {};
+    colsSolved = {};
+    numsSolved = {};
+    cellsSolved = {};
+    boxesSolved = {};
+
+    for (let i = 1; i <= 9; i++) {
+        document.getElementById("keypad-" + i.toString()).innerHTML = i.toString();
+    }
+
     fetch("/api/game/random-sudoku", {
         method: "POST",
         headers: {
@@ -314,6 +326,22 @@ function checkForWin() {
             colsSolved[j] = true;
         }
     }
+    
+    // Check if box is solved for points
+    // TODO: implement here
+    let currentBox = (Math.floor((currentCell.row - 0.1) / 3)) * 3 + (Math.floor((currentCell.col - 0.1) / 3) + 1);
+    let boxFull = true
+    for (let i = 1; i <= 3; i++) {
+        for (let j = 1; j <= 3; j++) {
+            const row = i + (Math.floor((currentBox - 1) / 3) * 3);
+            const col = j + (((currentBox - 1) % 3) * 3);
+            if (isNaN(solution[row][col])) boxFull = false;
+        }
+    }
+    if (boxFull && boxesSolved[currentBox] !== true) {
+        addPoints("box");
+        boxesSolved[currentBox] = true;
+    }
 
     if (!allCellsFilled) return;
     fetch("/api/game/check-solution", {
@@ -396,8 +424,6 @@ function addPoints(category) {
 
     const pointsToAdd = { col: 250, row: 250, num: 350, cell: 50, box: 300}[category];
     if (pointsToAdd === undefined) return;
-
-    console.log("Adding " + pointsToAdd + " because of " + category);
 
     const startPoints = currentPoints;
     const targetPoints = currentPoints + pointsToAdd;
