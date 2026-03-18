@@ -328,19 +328,19 @@ function checkForWin() {
     }
     
     // Check if box is solved for points
-    // TODO: implement here
-    let currentBox = (Math.floor((currentCell.row - 0.1) / 3)) * 3 + (Math.floor((currentCell.col - 0.1) / 3) + 1);
-    let boxFull = true
-    for (let i = 1; i <= 3; i++) {
-        for (let j = 1; j <= 3; j++) {
-            const row = i + (Math.floor((currentBox - 1) / 3) * 3);
-            const col = j + (((currentBox - 1) % 3) * 3);
-            if (isNaN(solution[row][col])) boxFull = false;
+    for (let b = 1; b <= 9; b++) {
+        let boxFull = true;
+        for (let i = 1; i <= 3; i++) {
+            for (let j = 1; j <= 3; j++) {
+                const row = i + (Math.floor((b - 1) / 3) * 3);
+                const col = j + (((b - 1) % 3) * 3);
+                if (isNaN(solution[row - 1][col - 1])) boxFull = false;
+            }
         }
-    }
-    if (boxFull && boxesSolved[currentBox] !== true) {
-        addPoints("box");
-        boxesSolved[currentBox] = true;
+        if (boxFull && boxesSolved[b] !== true) {
+            addPoints("box");
+            boxesSolved[b] = true;
+        }
     }
 
     if (!allCellsFilled) return;
