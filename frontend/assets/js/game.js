@@ -132,8 +132,7 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
             return;
         } else if (notesOn && /^[1-9]$/.test(getCurrentCell().innerHTML)) {
             return;
-        }
-        if (!skipHistory && getCurrentCell().classList.contains("board-cell-notes")) {
+        } if (!skipHistory && getCurrentCell().classList.contains("board-cell-notes")) {
             history.push({
                 cell: {
                     row: currentCell.row,
@@ -163,7 +162,7 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
         getCurrentCell().innerHTML = num;
         cellClick(currentCell.row, currentCell.col);
         if (skipCellCheck) {
-            checkForWin();
+            checkForWin(num);
             return;
         }
         fetch("/api/game/check-cell", {
@@ -189,7 +188,7 @@ function enterNumber(num, skipHistory = false, skipCellCheck = false) {
                             addPoints("cell");
                             cellsSolved[currentCell.row.toString() + currentCell.col.toString()] = true;
                         }
-                        checkForWin();
+                        checkForWin(num);
                     }
                 })
             }
@@ -275,7 +274,7 @@ function setGameMode(difficulty) {
     newGame();
 }
 
-function checkForWin() {
+function checkForWin(num) {
     let allCellsFilled = true;
     let numCounter = {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0};
     let solution = []
@@ -341,6 +340,10 @@ function checkForWin() {
             addPoints("box");
             boxesSolved[b] = true;
         }
+    }
+
+    if (!notesOn) {
+        checkSmartNotes(num);
     }
 
     if (!allCellsFilled) return;
@@ -447,18 +450,61 @@ function addPoints(category) {
 }
 
 function toggleMenu(desiredState = "") {
+    if (menuLock) return;
+    menuLock = true;
     let currentState = !["none", ""].includes(document.getElementById("menu-wrapper").style.display);
     if ((desiredState === "open" || desiredState === "") && !currentState) {
         document.getElementById("menu-wrapper").style.display = "flex";
         setTimeout(() => {
             document.getElementById("menu-wrapper").style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-            document.getElementById("menu").style.transform = "unset";  
+            document.getElementById("menu").style.transform = "unset";
+            setTimeout(() => {menuLock = false;}, 1000);
         }, 1);
     } else if ((desiredState === "closed" || desiredState === "") && currentState) {
         document.getElementById("menu").style.transform = "translateX(350px)";
         document.getElementById("menu-wrapper").style.backgroundColor = "rgba(0, 0, 0, 0)";
         setTimeout(() => {
             document.getElementById("menu-wrapper").style.display = "none";
+            menuLock = false;
         }, 1000);
+    }
+}
+
+function checkSmartNotes(num) {
+    // Check num
+    if (numsSolved[num] === true) {
+        for (let i = 1; i <= 9; i++) {
+            for (let j = 1; j <= 9; j++) {
+                if (getCell(i, j).children.length > 6) {
+                    getCell(i, j).children[num -1].innerHTML = "";
+                }
+            }
+        }
+    }
+
+    // Check row
+    for (let i = 1; i <= 9; i++) {
+        if (getCell(currentCell.row, i).children.length > 6) {
+            getCell(currentCell.row, i).children[num - 1].innerHTML = "";
+        }
+    }
+
+    // Check col
+    for (let i = 1; i <= 9; i++) {
+        if (getCell(i, currentCell.col).children.length > 6) {
+            getCell(i, currentCell.col).children[num - 1].innerHTML = "";
+        }
+    }
+
+    // Check box
+    let currentBox = (Math.floor((currentCell.row - 0.1) / 3)) * 3 + (Math.floor((currentCell.col - 0.1) / 3) + 1);
+    for (let i = 1; i <= 3; i++) {
+        for (let j = 1; j <= 3; j++) {
+            const row = i + (Math.floor((currentBox - 1) / 3) * 3);
+            const col = j + (((currentBox - 1) % 3) * 3);
+            if (getCell(row, col).children.length > 6) {
+                getCell(row, col).children[num - 1].innerHTML = "";
+            }
+        }
     }
 }
